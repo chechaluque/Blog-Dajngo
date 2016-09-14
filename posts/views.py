@@ -12,6 +12,7 @@ from .forms import PostForm
 from .models import Post
 
 
+
 # Create your views here.
 
 def post_create(request):
