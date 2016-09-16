@@ -34,10 +34,14 @@
         <br>
         <div>
             <p class="lead">Comments</p>
+            {% if request.user.is_authenticated %}
             <form action="." method="post">{% csrf_token %}
                 {{ comment_form| crispy }}
                 <input type="submit" class="btn btn-default" value="Post comment">
             </form>
+            {% else %}
+                <p>You must login to comment</p>
+            {% endif %}
             {% for comment in comments %}
             <blockquote>
                 <p>{{ comment.content }}</p>
@@ -52,11 +56,16 @@
                     <footer>Via {{ children_comment.user }} | {{ children_comment.timestamp|timesince }} ago</footer>
                      </blockquote>
                     {% endfor %}
+
+                 {% if request.user.is_authenticated %}
                 <form action="." method="post">{% csrf_token %}
                     {{ comment_form| crispy }}
                     <input type="hidden" name="parent_id" value="{{ comment.id }}">
                     <input type="submit" class="btn btn-default" value="Reply">
                 </form>
+                 {% else %}
+                <p>You must login to comment</p>
+            {% endif %}
             </div>
             </blockquote>
             <hr>
