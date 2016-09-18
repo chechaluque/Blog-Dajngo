@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^logout/', logout_view, name='logout'),
     url(r'^register/', register_view, name='register'),
     url(r'^', include('posts.urls', namespace='posts')),
+    url(r'^api/posts/', include('posts.api.urls', namespace='posts-api')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root= settings.STATIC_ROOT)
