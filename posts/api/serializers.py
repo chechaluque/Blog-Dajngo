@@ -1,4 +1,8 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import (
+    ModelSerializer,
+    HyperlinkedIdentityField,
+    SerializerMethodField
+)
 from posts.models import Post
 
 
@@ -11,26 +15,55 @@ class PostCreateUpdateSerializer(ModelSerializer):
             'content',
             'publish'
         ]
-
+post_url = HyperlinkedIdentityField(
+        view_name='posts-api:detail',
+        lookup_field='slug'
+    )
 class PostListSerializer(ModelSerializer):
+    url = post_url
+    user = SerializerMethodField()
     class Meta:
         model = Post
         fields =[
+            'url',
             'user',
             'title',
-            'slug',
+
             'content',
-            'publish'
+            'publish',
+
         ]
+    def get_user(self, obj):
+        return str(obj.user.username)
 
 
 class PostDetailSerializer(ModelSerializer):
+    url = post_url
+    user = SerializerMethodField()
+    image = SerializerMethodField()
+    html = SerializerMethodField()
     class Meta:
         model = Post
         fields =[
+            'url',
+            'user',
             'id',
             'title',
             'slug',
             'content',
-            'publish'
+            'html',
+            'publish',
+            'image'
         ]
+    def get_html(self, obj):
+        return obj.get_markdown()
+
+    def get_user(self, obj):
+        return str(obj.user.username)
+
+    def get_image(self, obj):
+        try:
+            image = obj.image.url
+        except:
+            image = None
+        return image
