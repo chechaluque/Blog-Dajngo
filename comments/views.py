@@ -6,7 +6,7 @@ from .forms import CommentForm
 from .models import Comment
 from django.contrib import  messages
 # Create your views here.
-@login_required #(login_url = '/login/')
+@login_required (login_url = '/login/')
 def comment_delete(request, id):
     #obj = get_object_or_404(Comment, id=id)
     #obj = Comment.objects.get(id=id)
